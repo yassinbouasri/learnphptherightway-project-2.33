@@ -30,9 +30,8 @@ class HomeController
     {
 
         $transactions = $this->getTransactions($this->getCSVcontent("csv"));
-        echo "<pre>";
         foreach ($transactions as $transaction) {
-            $date = DateTime::createFromFormat( "Y-m-d","2021-06-21");
+            $date = DateTime::createFromFormat( "m/d/Y",$transaction["date"]);
             $check = $transaction["check"] ?? null;
             $description = $transaction["description"] ?? null;
             $amount = $transaction["amount"] ?? null;
