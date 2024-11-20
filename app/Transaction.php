@@ -3,6 +3,7 @@
 namespace App;
 
 use DateTime;
+use PDO;
 
 class Transaction extends Model
 {
@@ -10,21 +11,28 @@ class Transaction extends Model
     {
         parent::__construct();
     }
-    public function insert(DateTime $date, int $check, string $description, float $amount): bool
+    public function insert(DateTime $date, string $checkNumber, string $description, float $amount): bool
     {
-        $sql = "INSERT INTO transactions (date, check_#, description, amount) VALUES (:date, :check_#, :description, :amount)";
+        $sql = "INSERT INTO transactions (date,checkNumber,description,amount) VALUES (:date, :checkNumber, :description, :amount)";
         $stmt = $this->db->prepare($sql);
 
-        $format = $date->format('Y-m-d H:i:s');
-        $stmt->bindParam(':date', $format);
-        $stmt->bindParam(':check_#', $check);
-        $stmt->bindParam(':description', $description);
-        $stmt->bindParam(':amount', $amount);
+        $stmt->bindValue(':date', $date->format('Y-m-d H:i:s'));
+        $stmt->bindValue(':checkNumber', $checkNumber);
+        $stmt->bindValue(':description', $description);
+        $stmt->bindValue(':amount', $amount);
         try {
             return $stmt->execute();
         } catch (\PDOException $e) {
             throw new \PDOException($e->getMessage());
         }
+    }
+
+    public function select():array
+    {
+        $sql = "SELECT * FROM transactions";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
 

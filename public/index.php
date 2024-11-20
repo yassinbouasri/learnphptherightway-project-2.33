@@ -20,7 +20,9 @@ $router = new Router();
 $router
     ->get('/', [HomeController::class, 'index'])
     ->get('/uploadCSV', [HomeController::class, 'uploadCSV'])
-    ->post('/storeCSV', [HomeController::class, 'storeCSV']);
+    ->post('/storeCSV', [HomeController::class, 'storeCSV'])
+    ->get('/showTransactions', [HomeController::class, 'showTransactions'])
+;
 
 (new App(
     $router,
