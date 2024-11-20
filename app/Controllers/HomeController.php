@@ -79,8 +79,8 @@ class HomeController
     {
         $transactions = $this->transaction->select();
         echo "<pre>";
-        var_dump($transactions);
-        return View::make('transactions');
+        $totals = $this->totals($transactions);
+        return View::make('transactions', ['transactions' => $transactions, 'totals' => $totals]);
     }
 
     private function totals(array $transactions): array
