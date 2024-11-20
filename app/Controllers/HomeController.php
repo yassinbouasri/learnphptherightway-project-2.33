@@ -15,6 +15,10 @@ class HomeController
 
     public function uploadCSV(): View
     {
-        return View::make('uploadCSV.php');
+        return View::make('uploadCSV');
+    }
+    public function storeCSV(): void
+    {
+
     }
 }
