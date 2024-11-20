@@ -7,6 +7,7 @@ namespace App\Controllers;
 use App\Transaction;
 use App\View;
 use DateTime;
+use DateTimeImmutable;
 
 class HomeController
 {
@@ -78,7 +79,6 @@ class HomeController
     public function showTransactions(): View
     {
         $transactions = $this->transaction->select();
-        echo "<pre>";
         $totals = $this->totals($transactions);
         return View::make('transactions', ['transactions' => $transactions, 'totals' => $totals]);
     }
