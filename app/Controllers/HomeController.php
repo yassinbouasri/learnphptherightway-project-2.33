@@ -22,7 +22,7 @@ class HomeController
 
     public function index(): View
     {
-        App::$container->get(InvoiceService::class)->process([],25);
+        (new Container())->get(InvoiceService::class)->process([],25);
         return View::make('index');
     }
 
