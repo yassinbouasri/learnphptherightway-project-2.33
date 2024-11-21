@@ -4,10 +4,13 @@ declare(strict_types = 1);
 
 namespace App\Controllers;
 
+use App\Container;
+use App\Services\InvoiceService;
+use App\Services\SalesTaxService;
 use App\Transaction;
 use App\View;
 use DateTime;
-use DateTimeImmutable;
+use App\App;
 
 class HomeController
 {
@@ -19,6 +22,7 @@ class HomeController
 
     public function index(): View
     {
+        App::$container->get(InvoiceService::class)->process([],25);
         return View::make('index');
     }
 

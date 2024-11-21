@@ -26,6 +26,8 @@ class InvoiceService
         // 3. send receipt
         $this->emailService->send($customer, 'receipt');
 
+        echo 'Invoice processed <br />';
+
         return true;
     }
 }

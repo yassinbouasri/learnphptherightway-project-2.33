@@ -41,7 +41,7 @@ class InvoiceServiceTest extends TestCase
         $emailServiceMock
             ->expects($this->once())
             ->method('send')
-            ->with(['name' => 'John '], 'receipt');
+            ->with(['name' => 'John Doe'], 'receipt');
 
         $invoiceService = new InvoiceService($salesTaxServiceMock,$gatewayServiceMock,$emailServiceMock);
 
