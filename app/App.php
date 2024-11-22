@@ -8,32 +8,21 @@ use App\Exceptions\RouteNotFoundException;
 use App\Services\EmailService;
 use App\Services\InvoiceService;
 use App\Services\PaymentGatewayService;
+use App\Services\PaymentGatewayServiceInterface;
 use App\Services\SalesTaxService;
 
 class App
 {
     private static DB $db;
-    public static Container $container;
 
-    public function __construct(protected Router $router, protected array $request, protected Config $config)
-    {
+    public function __construct(
+        protected Container $container,
+        protected Router $router,
+        protected array $request,
+        protected Config $config
+    ){
         static::$db = new DB($config->db ?? []);
-        static::$container = new Container();
-
-        static::$container->set(
-            InvoiceService::class,
-            function (Container $c) {
-                return new InvoiceService(
-                    $c->get(SalesTaxService::class),
-                    $c->get(PaymentGatewayService::class),
-                    $c->get(EmailService::class)
-                    );
-                }
-             );
-
-        static::$container->set(SalesTaxService::class, fn() => new SalesTaxService());
-        static::$container->set(PaymentGatewayService::class, fn() => new PaymentGatewayService());
-        static::$container->set(EmailService::class, fn() => new EmailService());
+        $this->container->set(PaymentGatewayServiceInterface::class, PaymentGatewayService::class);
     }
 
     public static function db(): DB
