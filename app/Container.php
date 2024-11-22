@@ -1,13 +1,12 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App;
 
 use App\Exceptions\ContainerException;
 use App\Exceptions\NotFoundException;
-use http\Exception\BadConversionException;
-use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
-use Psr\Container\NotFoundExceptionInterface;
 
 class Container implements ContainerInterface
 {
@@ -17,12 +16,14 @@ class Container implements ContainerInterface
     {
         if ($this->has($id)) {
             $entry = $this->entries[$id];
-            if(is_callable($entry)) {
+
+            if (is_callable($entry)) {
                 return $entry($this);
             }
-            $id = $entry;
 
+            $id = $entry;
         }
+
         return $this->resolve($id);
     }
 
@@ -31,65 +32,67 @@ class Container implements ContainerInterface
         return isset($this->entries[$id]);
     }
 
-    public function set(string $id, callable $concrete): void
+    public function set(string $id, callable|string $concrete): void
     {
         $this->entries[$id] = $concrete;
     }
 
-    /**
-     * @throws NotFoundExceptionInterface
-     * @throws \ReflectionException
-     * @throws ContainerExceptionInterface
-     * @throws ContainerException
-     */
     public function resolve(string $id)
     {
-        //1
-        $reflectionClass = new \ReflectionClass($id);
-        if (!$reflectionClass->isInstantiable()) {
+        // 1. Inspect the class that we are trying to get from the container
+        try {
+            $reflectionClass = new \ReflectionClass($id);
+        } catch(\ReflectionException $e) {
+            throw new NotFoundException($e->getMessage(), $e->getCode(), $e);
+        }
+
+        if (! $reflectionClass->isInstantiable()) {
             throw new ContainerException('Class "' . $id . '" is not instantiable');
         }
-        //2
+
+        // 2. Inspect the constructor of the class
         $constructor = $reflectionClass->getConstructor();
-        if (!$constructor) {
+
+        if (! $constructor) {
             return new $id;
         }
-        //3
+
+        // 3. Inspect the constructor parameters (dependencies)
         $parameters = $constructor->getParameters();
-        if(! $parameters) {
+
+        if (! $parameters) {
             return new $id;
         }
 
-        //4
+        // 4. If the constructor parameter is a class then try to resolve that class using the container
+        $dependencies = array_map(
+            function (\ReflectionParameter $param) use ($id) {
+                $name = $param->getName();
+                $type = $param->getType();
 
-        $dependencies = array_map(function (\ReflectionParameter $parameter) use ($id) {
-            $name = $parameter->getName();
-            $type = $parameter->getType();
-
-            if(!$type) {
-                throw new ContainerException('Failed to resolve class "' . $id . '" because param "' . $name . '" is missing a type hint');
-            }
-
-            if ($type instanceof \ReflectionNamedType) {
-                if ($type->isBuiltin()) {
-                    throw new ContainerException('Failed to resolve class "' . $id . '" because of union type of param "' . $name . '"');
+                if (! $type) {
+                    throw new ContainerException(
+                        'Failed to resolve class "' . $id . '" because param "' . $name . '" is missing a type hint'
+                    );
                 }
-                return $this->get($type->getName());
-            }
 
-            if ($type instanceof \ReflectionUnionType) {
-                foreach ($type->getTypes() as $type) {
-                    if ($type->isBuiltin()) {
-                        return $this->get($type->getName());
-                    }
-
+                if ($type instanceof \ReflectionUnionType) {
+                    throw new ContainerException(
+                        'Failed to resolve class "' . $id . '" because of union type for param "' . $name . '"'
+                    );
                 }
-                throw new ContainerException("Failed to resolve class");
-            }
-            throw new BadConversionException('Union type of param "' . $name . '" is not supported');
-        },
+
+                if ($type instanceof \ReflectionNamedType && ! $type->isBuiltin()) {
+                    return $this->get($type->getName());
+                }
+
+                throw new ContainerException(
+                    'Failed to resolve class "' . $id . '" because invalid param "' . $name . '"'
+                );
+            },
             $parameters
         );
+
         return $reflectionClass->newInstanceArgs($dependencies);
     }
 }

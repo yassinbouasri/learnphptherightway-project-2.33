@@ -15,14 +15,14 @@ use App\App;
 class HomeController
 {
     private Transaction $transaction;
-    public function __construct()
+    public function __construct(private InvoiceService $invoiceService)
     {
         $this->transaction = new Transaction();
     }
 
     public function index(): View
     {
-        (new Container())->get(InvoiceService::class)->process([],25);
+        $this->invoiceService->process([], 25);
         return View::make('index');
     }
 

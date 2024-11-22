@@ -5,11 +5,8 @@ declare(strict_types = 1);
 namespace App;
 
 use App\Exceptions\RouteNotFoundException;
-use App\Services\EmailService;
-use App\Services\InvoiceService;
 use App\Services\PaymentGatewayService;
 use App\Services\PaymentGatewayServiceInterface;
-use App\Services\SalesTaxService;
 
 class App
 {
@@ -20,8 +17,9 @@ class App
         protected Router $router,
         protected array $request,
         protected Config $config
-    ){
+    ) {
         static::$db = new DB($config->db ?? []);
+
         $this->container->set(PaymentGatewayServiceInterface::class, PaymentGatewayService::class);
     }
 

@@ -17,16 +17,13 @@ define('STORAGE_PATH', __DIR__ . '/../storage');
 define('VIEW_PATH', __DIR__ . '/../views');
 
 $container = new Container();
-$router = new Router($container);
+$router    = new Router($container);
 
 $router
-    ->get('/', [HomeController::class, 'index'])
-    ->get('/uploadCSV', [HomeController::class, 'uploadCSV'])
-    ->post('/storeCSV', [HomeController::class, 'storeCSV'])
-    ->get('/showTransactions', [HomeController::class, 'showTransactions'])
-;
+    ->get('/', [HomeController::class, 'index']);
 
 (new App(
+    $container,
     $router,
     ['uri' => $_SERVER['REQUEST_URI'], 'method' => $_SERVER['REQUEST_METHOD']],
     new Config($_ENV)
