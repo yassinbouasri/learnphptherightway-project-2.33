@@ -26,6 +26,7 @@ $router->registerRoutesFromControllerAttributes(
     ]
 );
 
+
 //$router
 //    ->get('/', [HomeController::class, 'index']);
 

@@ -28,11 +28,12 @@ class HomeController
         return View::make('index');
     }
 
+    #[Route('/uploadCSV')]
     public function uploadCSV(): View
     {
         return View::make('uploadCSV');
     }
-    #[Route('/storeCSV', "POST")]
+    #[Route('/storeCSV', method: 'POST')]
     public function storeCSV(): void
     {
 

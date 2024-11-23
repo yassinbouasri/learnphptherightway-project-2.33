@@ -6,7 +6,7 @@ namespace App\Attributes;
 
 use Attribute;
 
-#[Attribute]
+#[Attribute(Attribute::IS_REPEATABLE)]
 class Route
 {
     public function __construct(public string $routePath, public string $method = 'get')
