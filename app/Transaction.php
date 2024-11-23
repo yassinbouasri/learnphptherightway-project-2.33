@@ -3,6 +3,7 @@
 namespace App;
 
 use DateTime;
+use Doctrine\DBAL\Exception;
 use PDO;
 
 class Transaction extends Model
@@ -11,19 +12,25 @@ class Transaction extends Model
     {
         parent::__construct();
     }
-    public function insert(DateTime $date, string $checkNumber, string $description, float $amount): bool
+    public function insert(DateTime $date, string $checkNumber, string $description, float $amount): \Doctrine\DBAL\Result
     {
         try {
             return $this->db->createQueryBuilder()
-            ->insert('transactions')
-            ->values([
-                'date' => $date->format('Y-m-d H:i:s'),
-                'checkNumber' => $checkNumber,
-                'description' => $description,
-                'amount' => $amount
-            ]);
-        } catch (\PDOException $e) {
-            throw new \PDOException($e->getMessage());
+                ->insert('transactions')
+                ->values([
+                    'date' => ':date',
+                    'checkNumber' => ':checkNumber',
+                    'description' => ':description',
+                    'amount' => ':amount'
+                ])
+                ->setParameter(':date', $date)
+                ->setParameter(':checkNumber', $checkNumber)
+                ->setParameter(':description', $description)
+                ->setParameter(':amount', $amount)
+                ->executeQuery();
+
+        }  catch (Exception $e) {
+            return false;
         }
     }
 

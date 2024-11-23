@@ -33,11 +33,11 @@ class HomeController
     {
         return View::make('uploadCSV');
     }
-    #[Route('/storeCSV', method: 'POST')]
+    #[Route('/storeCSV', 'post')]
     public function storeCSV(): void
     {
-
         $transactions = $this->getTransactions($this->getCSVcontent("csv"));
+        var_dump($transactions);
         foreach ($transactions as $transaction) {
             $date = DateTime::createFromFormat( "m/d/Y",$transaction["date"]);
             $check = $transaction["check"] ?? null;
@@ -51,6 +51,7 @@ class HomeController
     {
         if ($_FILES[$fileName]['error'] !== 0) {
             echo "Error while trying to open " . $fileName . "<br>";
+            var_dump($_FILES);
             return [];
         }
         $file = fopen($_FILES[$fileName]['tmp_name'], "r");

@@ -21,7 +21,8 @@ class Router
         foreach ($controllers as $controller) {
             $reflectionController = new \ReflectionClass($controller);
 
-            foreach ($reflectionController->getMethods() as $method) {
+            foreach ($reflectionController->
+            getMethods() as $method) {
                 $attributes = $method->getAttributes(Route::class);
                 foreach ($attributes as $attribute) {
                     $route = $attribute->newInstance();

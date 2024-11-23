@@ -22,13 +22,11 @@ $router    = new Router($container);
 $router->registerRoutesFromControllerAttributes(
     [
         HomeController::class,
-
     ]
 );
 
-
-//$router
-//    ->get('/', [HomeController::class, 'index']);
+echo "<pre>";
+print_r($router);
 
 (new App(
     $container,
