@@ -13,15 +13,15 @@ class Transaction extends Model
     }
     public function insert(DateTime $date, string $checkNumber, string $description, float $amount): bool
     {
-        $sql = "INSERT INTO transactions (date,checkNumber,description,amount) VALUES (:date, :checkNumber, :description, :amount)";
-        $stmt = $this->db->prepare($sql);
-
-        $stmt->bindValue(':date', $date->format('Y-m-d H:i:s'));
-        $stmt->bindValue(':checkNumber', $checkNumber);
-        $stmt->bindValue(':description', $description);
-        $stmt->bindValue(':amount', $amount);
         try {
-            return $stmt->execute();
+            return $this->db->createQueryBuilder()
+            ->insert('transactions')
+            ->values([
+                'date' => $date->format('Y-m-d H:i:s'),
+                'checkNumber' => $checkNumber,
+                'description' => $description,
+                'amount' => $amount
+            ]);
         } catch (\PDOException $e) {
             throw new \PDOException($e->getMessage());
         }
@@ -29,10 +29,11 @@ class Transaction extends Model
 
     public function select():array
     {
-        $sql = "SELECT * FROM transactions";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $this->db->createQueryBuilder()
+            ->select('*')
+            ->from('transactions')
+            ->fetchAllAssociative()
+        ;
     }
 
 
