@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Controllers;
 
+use App\Attributes\Route;
 use App\Container;
 use App\Services\InvoiceService;
 use App\Services\SalesTaxService;
@@ -20,6 +21,7 @@ class HomeController
         $this->transaction = new Transaction();
     }
 
+    #[Route('/')]
     public function index(): View
     {
         $this->invoiceService->process([], 25);
@@ -30,6 +32,7 @@ class HomeController
     {
         return View::make('uploadCSV');
     }
+    #[Route('/storeCSV', "POST")]
     public function storeCSV(): void
     {
 
@@ -79,6 +82,7 @@ class HomeController
         return $transactionsKeyVal;
     }
 
+    #[Route('/showTransactions')]
     public function showTransactions(): View
     {
         $transactions = $this->transaction->select();

@@ -19,8 +19,15 @@ define('VIEW_PATH', __DIR__ . '/../views');
 $container = new Container();
 $router    = new Router($container);
 
-$router
-    ->get('/', [HomeController::class, 'index']);
+$router->registerRoutesFromControllerAttributes(
+    [
+        HomeController::class,
+
+    ]
+);
+
+//$router
+//    ->get('/', [HomeController::class, 'index']);
 
 (new App(
     $container,
