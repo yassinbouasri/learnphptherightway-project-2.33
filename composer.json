@@ -3,7 +3,9 @@
         "ext-pdo": "*",
         "vlucas/phpdotenv": "^5.3",
         "psr/container": "^2.0",
-        "doctrine/dbal": "^4.2"
+        "doctrine/dbal": "^4.2",
+        "doctrine/orm": "^3.3",
+        "symfony/cache": "^7.1"
     },
     "autoload": {
         "psr-4": {
