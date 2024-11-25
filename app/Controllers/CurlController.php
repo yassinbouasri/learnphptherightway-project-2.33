@@ -18,8 +18,9 @@ class CurlController
         $email = 'yassinbouasri@gmail.com';
         $response = $this->emailValidationInterface->verify($email);
 
+
         echo '<pre>';
-        print_r($response);
+        print_r($response->score);
         echo '</pre>';
     }
 
