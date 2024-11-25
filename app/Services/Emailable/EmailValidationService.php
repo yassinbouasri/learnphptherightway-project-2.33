@@ -35,18 +35,6 @@ class EmailValidationService
 
         $response = $client->get('verify', ['query' => $params]);
 
-        $url = self::BASEURL . 'verify?' . http_build_query($params);
-        echo $url;
-
-        curl_setopt($handle, CURLOPT_URL, $url);
-        curl_setopt($handle, CURLOPT_RETURNTRANSFER, 1);
-        $output = curl_exec($handle);
-
-        if ($output !== FALSE) {
-            $data = json_decode($output, true);
-            echo '<pre>';
-            print_r($data);
-        }
-        return [];
+        return json_decode($response->getBody()->getContents(), true);
     }
 }
