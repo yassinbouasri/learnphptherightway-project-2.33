@@ -5,7 +5,8 @@
         "psr/container": "^2.0",
         "doctrine/dbal": "^4.2",
         "doctrine/orm": "^3.3",
-        "symfony/cache": "^7.1"
+        "symfony/cache": "^7.1",
+      "ext-curl": "*"
     },
     "autoload": {
         "psr-4": {

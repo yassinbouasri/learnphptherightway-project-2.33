@@ -5,6 +5,7 @@ declare(strict_types = 1);
 use App\App;
 use App\Config;
 use App\Container;
+use App\Controllers\CurlController;
 use App\Controllers\HomeController;
 use App\Router;
 
@@ -22,11 +23,10 @@ $router    = new Router($container);
 $router->registerRoutesFromControllerAttributes(
     [
         HomeController::class,
+        CurlController::class,
     ]
 );
 
-echo "<pre>";
-print_r($router);
 
 (new App(
     $container,
