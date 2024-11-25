@@ -6,6 +6,7 @@ namespace App\Services\Emailable;
 
 
 
+use App\Contracts\EmailValidationInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
@@ -14,7 +15,7 @@ use GuzzleHttp\Middleware;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class EmailValidationService
+class EmailValidationService implements EmailValidationInterface
 {
     const BASEURL = 'https://api.emailable.com/v1/';
 

@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App;
 
+use App\Contracts\EmailValidationInterface;
 use App\Exceptions\RouteNotFoundException;
 use App\Services\Emailable\EmailValidationService;
 use App\Services\PaymentGatewayService;
@@ -22,7 +23,7 @@ class App
         static::$db = new DB($config->db ?? []);
 
         $this->container->bind(PaymentGatewayServiceInterface::class, PaymentGatewayService::class);
-        $this->container->bind(EmailValidationService::class, fn() => new EmailValidationService($this->config->apiKeys['emailable']));
+        $this->container->bind(EmailValidationInterface::class, fn() => new EmailValidationService($this->config->apiKeys['emailable']));
     }
 
     public static function db(): DB
