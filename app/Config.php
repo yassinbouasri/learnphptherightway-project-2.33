@@ -21,6 +21,9 @@ class Config
                 'dbname' => $env['DB_DATABASE'],
                 'driver'   => $env['DB_DRIVER'] ?? 'pdo_mysql',
             ],
+            'apiKeys' => [
+                'emailable' => $env['EMAILABLE_API_KEY'] ?? null,
+            ]
         ];
     }
 

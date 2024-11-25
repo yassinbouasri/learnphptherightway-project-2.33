@@ -6,7 +6,9 @@
         "doctrine/dbal": "^4.2",
         "doctrine/orm": "^3.3",
         "symfony/cache": "^7.1",
-      "ext-curl": "*"
+      "ext-curl": "*",
+        "illuminate/database": "^11.33",
+        "guzzlehttp/guzzle": "^7.9"
     },
     "autoload": {
         "psr-4": {

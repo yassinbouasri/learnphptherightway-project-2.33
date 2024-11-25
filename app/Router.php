@@ -6,13 +6,12 @@ namespace App;
 
 use App\Attributes\Route;
 use App\Exceptions\RouteNotFoundException;
-use SebastianBergmann\RecursionContext\Context;
 
 class Router
 {
     private array $routes;
 
-    public function __construct(private Container $container)
+    public function __construct(private \Illuminate\Container\Container $container)
     {
     }
 
