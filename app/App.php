@@ -10,6 +10,7 @@ use App\Services\Emailable\EmailValidationService;
 use App\Services\PaymentGatewayService;
 use App\Services\PaymentGatewayServiceInterface;
 use Twig\Environment;
+use Twig\Extra\Intl\IntlExtension;
 use Twig\Loader\FilesystemLoader;
 
 class App
@@ -27,6 +28,7 @@ class App
             'cache' => STORAGE_PATH . '/cache',
             'auto_reload' => true,
         ]);
+        $twig->addExtension(new IntlExtension());
         static::$db = new DB($config->db ?? []);
 
         $this->container->bind(PaymentGatewayServiceInterface::class, PaymentGatewayService::class);
