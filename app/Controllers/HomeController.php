@@ -11,12 +11,12 @@ use App\Services\SalesTaxService;
 use App\Transaction;
 use App\View;
 use DateTime;
-use App\App;
+use Twig\Environment as Twig;
 
 class HomeController
 {
     private Transaction $transaction;
-    public function __construct(private InvoiceService $invoiceService)
+    public function __construct(private InvoiceService $invoiceService, private Twig $twig)
     {
         $this->transaction = new Transaction();
     }
@@ -85,11 +85,11 @@ class HomeController
     }
 
     #[Route('/showTransactions')]
-    public function showTransactions(): View
+    public function showTransactions(): string
     {
         $transactions = $this->transaction->select();
         $totals = $this->totals($transactions);
-        return View::make('transactions', ['transactions' => $transactions, 'totals' => $totals]);
+        return  $this->twig->render('transactions.twig', ['transactions' => $transactions, 'totals' => $totals]);
     }
 
     private function totals(array $transactions): array

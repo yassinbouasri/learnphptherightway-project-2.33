@@ -9,6 +9,8 @@ use App\Exceptions\RouteNotFoundException;
 use App\Services\Emailable\EmailValidationService;
 use App\Services\PaymentGatewayService;
 use App\Services\PaymentGatewayServiceInterface;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 class App
 {
@@ -20,10 +22,16 @@ class App
         protected array $request,
         protected Config $config
     ) {
+        $loader = new FilesystemLoader(VIEW_PATH);
+        $twig = new Environment($loader, [
+            'cache' => STORAGE_PATH . '/cache',
+            'auto_reload' => true,
+        ]);
         static::$db = new DB($config->db ?? []);
 
         $this->container->bind(PaymentGatewayServiceInterface::class, PaymentGatewayService::class);
         $this->container->bind(EmailValidationInterface::class, fn() => new EmailValidationService($this->config->apiKeys['emailable']));
+        $this->container->singleton(Environment::class, fn() => $twig);
     }
 
     public static function db(): DB

@@ -35,6 +35,15 @@
     </thead>
     <tbody>
 
+    {% for transaction in transactions %}
+    <tr>
+        <td>{{ transaction.date }}</td>
+        <td>{{ transaction.check }}</td>
+        <td>{{ transaction.description }}</td>
+        <td>{{ transaction.amount }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
 
     <?php foreach ($transactions as $transaction): ?>
         <tr>
