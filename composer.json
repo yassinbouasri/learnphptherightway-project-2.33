@@ -11,7 +11,8 @@
         "guzzlehttp/guzzle": "^7.9",
         "twig/twig": "^3.0",
         "twig/intl-extra": "^3.15",
-        "twig/extra-bundle": "^3.15"
+        "twig/extra-bundle": "^3.15",
+      "ext-xdebug": "*"
     },
     "autoload": {
         "psr-4": {
