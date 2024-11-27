@@ -22,10 +22,10 @@ class HomeController
     }
 
     #[Route('/')]
-    public function index(): View
+    public function index(): twig
     {
         $this->invoiceService->process([], 25);
-        return View::make('index');
+        return $this->twig->render('index.twig');
     }
 
     #[Route('/uploadCSV')]
