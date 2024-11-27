@@ -12,6 +12,9 @@ use App\Transaction;
 use App\View;
 use DateTime;
 use Twig\Environment as Twig;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class HomeController
 {
@@ -22,16 +25,16 @@ class HomeController
     }
 
     #[Route('/')]
-    public function index(): twig
+    public function index(): string
     {
         $this->invoiceService->process([], 25);
         return $this->twig->render('index.twig');
     }
 
     #[Route('/uploadCSV')]
-    public function uploadCSV(): View
+    public function uploadCSV(): string
     {
-        return View::make('uploadCSV');
+        return $this->twig->render('uploadCSV.twig');
     }
     #[Route('/storeCSV', 'post')]
     public function storeCSV(): void
@@ -84,6 +87,11 @@ class HomeController
         return $transactionsKeyVal;
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
     #[Route('/showTransactions')]
     public function showTransactions(): string
     {
